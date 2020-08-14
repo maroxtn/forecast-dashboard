@@ -135,8 +135,15 @@ function doThePlots(){
 document.addEventListener('DOMContentLoaded', function() {
     setTimeout(function(){
         table.order( [ 1, 'asc' ] ).draw();
-        document.getElementById('dataTable_info').innerHTML = "Test bobob";
        }, 1000);
 
     
  }, false);
+
+
+ document.getElementById('sidebar-toggle').addEventListener('click', function(){
+    setTimeout(function(){
+        table.order( [ 1, 'asc' ] ).draw();
+       }, 500);
+
+ })

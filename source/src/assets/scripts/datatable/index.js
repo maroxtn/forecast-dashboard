@@ -3,7 +3,8 @@ import 'datatables';
 
 export default (function () {
   var table = $('#dataTable').DataTable({
-    "scrollX": true
+    "scrollX": true,
+    paging: false
   });
 
   $('#dataTable tbody').on('click', 'tr', function () {
@@ -18,6 +19,8 @@ export default (function () {
 
   } );
 
+
+  $("#dataTable_wrapper").prepend('<div class="dataTables_length" id="dataTable_length"></div>')
   var htmltext = ""
   htmltext += $("#hiddenForm").html()
 

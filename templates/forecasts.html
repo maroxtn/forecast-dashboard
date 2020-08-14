@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Dashboard</title>
+    <title>{{title}}</title>
 
     <style>
       #loader {
@@ -53,6 +53,7 @@
         }
       }
     </style>
+    {% include "icon.html" %}
   <link href="{{ url_for('static',filename='css/style.css') }}" rel="stylesheet"></head>
   <body class="app">
     <!-- @TOC -->
@@ -106,7 +107,8 @@
                   <div class="peers fxw-nw@lg+ ai-s">
                     <div class="col-md-12">
                       <div class="bgc-white bd bdrs-3 p-20 mB-20">
-                        <h4 class="c-grey-900 mB-20">Products' sales:</h4>
+                        <h4 class="c-grey-900 mB-20">Products' sales <span style="font-weight: normal;font-size: 14px;font-style: italic;">
+                                                    ({{startDate.strftime("%Y-%m-%d")}} , {{endDate.strftime("%Y-%m-%d")}})</span>:</h4>
                         <table id="dataTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
                             <thead>
                               <tr>
@@ -114,15 +116,15 @@
                                 {% for i in range(horizon) %}
                                   {% if unit == "w" %}
                                     {% if i < (horizon - predictHorizon) %}
-                                      <th title="{{products.columns[i]}}">W{{i+1}}</th>
+                                      <th title="{{products.columns[i].strftime('%Y-%m-%d')}}">W{{i+1}}</th>
                                     {% else %}
-                                    <th title="{{products.columns[i]}}" style="background: #e8e8e8 !important;">W{{i+1}}</th>
+                                    <th title="{{products.columns[i].strftime('%Y-%m-%d')}}" style="background: #e8e8e8 !important;">W{{i+1}}</th>
                                     {% endif %}
                                   {% else %}
                                     {% if forecast_start > products.columns[i] %}
-                                      <th title="{{products.columns[i]}}">M{{i+1}}</th>
+                                      <th title="{{products.columns[i].strftime('%Y-%m-%d') }}">M{{i+1}}</th>
                                     {% else %}
-                                    <th title="{{products.columns[i]}}" style="background: #e8e8e8 !important;">M{{i+1}}</th>
+                                    <th title="{{products.columns[i].strftime('%Y-%m-%d') }}" style="background: #e8e8e8 !important;">M{{i+1}}</th>
                                     {% endif %}
                                   {% endif %}
                                 {% endfor %}
@@ -179,7 +181,7 @@
       <input type="hidden" value="{{horizon}}" id="horizonInput"/>
       <input type="hidden" value="{{predictHorizon}}" id="predictHorizon"/>
       <div id="hiddenForm" style="display:none">
-        <form method="POST" action="/" class="form-inline">
+        <form method="POST" action="/forecasts" class="form-inline">
           <div>
             <select id="groupID" name="category" value="{{selectedCat}}">
             {% for group in groups %}
@@ -215,10 +217,7 @@
         </form>
       </div>
 
-        <!-- ### $App Screen Footer ### -->
-        <footer class="bdT ta-c p-30 lh-0 fsz-sm c-grey-600">
-          <span>Copyright © 2019 Designed by <a href="https://colorlib.com" target='_blank' title="Colorlib">Colorlib</a>. All rights reserved.</span>
-        </footer>
+      {% include 'footer.html' %}
       </div>
     </div>
   <script type="text/javascript" src="{{ url_for('static',filename='js/plotly-latest.min.js') }}"></script>
@@ -292,14 +291,9 @@
 </html>
 
 
-<!--TODO
+<!----
 
+    Develop a page for errors 505
+    Test test test
 
-
-  Make table always 100% open
-  Remove Test bobo
-  Change the footer
-  Try and fix the scroll issue
-
-
--->
+!---> 

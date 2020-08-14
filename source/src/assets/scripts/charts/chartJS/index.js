@@ -12,24 +12,27 @@ export default (function () {
     const lineCtx = lineChartBox.getContext('2d');
     lineChartBox.height = 80;
 
+    var data1 = document.getElementById('n1n-1_val1').value.split(" ");
+    var data2 = document.getElementById('n1n-1_val2').value.split(" ");
+
     new Chart(lineCtx, {
       type: 'line',
       data: {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
         datasets: [{
-          label                : 'Series A',
+          label                : 'Last Year',
           backgroundColor      : 'rgba(237, 231, 246, 0.5)',
           borderColor          : COLORS['deep-purple-500'],
           pointBackgroundColor : COLORS['deep-purple-700'],
           borderWidth          : 2,
-          data                 : [60, 50, 70, 60, 50, 70, 60],
+          data                 : data1,
         }, {
-          label                : 'Series B',
+          label                : 'This Year',
           backgroundColor      : 'rgba(232, 245, 233, 0.5)',
           borderColor          : COLORS['blue-500'],
           pointBackgroundColor : COLORS['blue-700'],
           borderWidth          : 2,
-          data                 : [70, 75, 85, 70, 75, 85, 70],
+          data                 : data2,
         }],
       },
 
@@ -37,7 +40,22 @@ export default (function () {
         legend: {
           display: false,
         },
-      },
+		scales: {
+		    yAxes: [
+		        {
+		            ticks: {
+		                callback: function(label, index, labels) {
+		                    return label/1000+'k';
+		                }
+		            },
+		            scaleLabel: {
+		                display: true,
+		                labelString: 'Thousands of dinars'
+		            }
+		        }
+		    ]
+		}
+      }
 
     });
   }
@@ -50,23 +68,19 @@ export default (function () {
 
   if (barChartBox) {
     const barCtx = barChartBox.getContext('2d');
+    var vals = document.getElementById("ordersperproduct_values").value.split(" ");
+    var label = document.getElementById("ordersperproduct_prods").value.split(" ");
 
     new Chart(barCtx, {
-      type: 'bar',
+      type: 'horizontalBar',
       data: {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        labels: label,
         datasets: [{
-          label           : 'Dataset 1',
-          backgroundColor : COLORS['deep-purple-500'],
-          borderColor     : COLORS['deep-purple-800'],
-          borderWidth     : 1,
-          data            : [10, 50, 20, 40, 60, 30, 70],
-        }, {
-          label           : 'Dataset 2',
+          label : 'Product Revenue',
           backgroundColor : COLORS['light-blue-500'],
           borderColor     : COLORS['light-blue-800'],
           borderWidth     : 1,
-          data            : [10, 50, 20, 40, 60, 30, 70],
+          data            : vals,
         }],
       },
 
@@ -75,6 +89,21 @@ export default (function () {
         legend: {
           position: 'bottom',
         },
+		scales: {
+		    xAxes: [
+		        {
+		            ticks: {
+		                callback: function(label, index, labels) {
+		                    return label/1000+'k';
+		                }
+		            },
+		            scaleLabel: {
+		                display: true,
+		                labelString: 'Thousands of dinars'
+		            }
+		        }
+		    ]
+		}
       },
     });
   }

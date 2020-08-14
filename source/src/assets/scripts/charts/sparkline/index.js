@@ -10,7 +10,8 @@ export default (function () {
 
   const drawSparklines = () => {
     if ($('#sparklinedash').length > 0) {
-      $('#sparklinedash').sparkline([0, 5, 6, 10, 9, 12, 4, 9], {
+	var vals = document.getElementById('dailyRevenue_p').value.split(" ")
+      $('#sparklinedash').sparkline(vals, {
         type: 'bar',
         height: '20',
         barWidth: '3',
@@ -21,7 +22,8 @@ export default (function () {
     }
 
     if ($('#sparklinedash2').length > 0) {
-      $('#sparklinedash2').sparkline([0, 5, 6, 10, 9, 12, 4, 9], {
+	var vals = document.getElementById('dailyOrder_p').value.split(" ")
+      $('#sparklinedash2').sparkline(vals, {
         type: 'bar',
         height: '20',
         barWidth: '3',

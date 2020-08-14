@@ -53,3 +53,79 @@ def GetSalesQuantity(unit="w", category="GZ1900211", Horizon=15,
     assert(forecasted.index.shape[0] == horizon)
 
     return (forecasted.T, category, unit, end, start, horizon, "w", futureSteps, forecastStarts)
+
+
+
+def indexVals():
+
+    cnx = connectDatabase()
+
+
+
+    #Getting the monthly revenues of this year and last year
+    currdate = datetime.datetime.strptime(hypoth_current_date ,"%Y-%m-%d")
+
+    currdate = datetime.date(currdate.year - 1, 1, 1)
+
+    query = "select YEAR(posting_date) , MONTH(posting_date) ,sum(sales_amount_expected + sales_amount_actual) from transactions WHERE posting_date BETWEEN '{0}' and '{1}' AND entry_type LIKE '%sale%' GROUP BY MONTH(posting_date), YEAR(posting_date);"
+    query = query.format(currdate, hypoth_current_date)
+
+    dataCursor = cnx.cursor()
+    dataCursor.execute(query)
+    dataResults = dataCursor.fetchall()
+
+    results = pd.DataFrame(dataResults, columns = ['year', 'month', 'qty'])
+
+    year1 = np.round((results["qty"].values[0:12].astype("float")/1000), decimals=3) #Convert unity to dinar since it is in millime
+    year2 = np.round((results["qty"].values[12:-1].astype("float")/1000), decimals=3)
+
+
+    year_1 = ' '.join(str(e) for e in year1)   #Stringify the array
+    year_2 = ' '.join(str(e) for e in year2) 
+
+
+
+    #Getting all columns of this month
+    currdate = datetime.datetime.strptime(hypoth_current_date ,"%Y-%m-%d")
+    currdate = datetime.date(currdate.year, currdate.month, 1)
+
+    query = "select item_no, posting_date, source_no, document_no, (sales_amount_expected + sales_amount_actual) as revenue from transactions WHERE posting_date BETWEEN '{0}' and '{1}' AND entry_type LIKE '%sale%' AND document_type LIKE '%Sales Shipment%';"
+    query = query.format(currdate, hypoth_current_date)
+    
+    dataCursor = cnx.cursor()
+    dataCursor.execute(query)
+    dataResults = dataCursor.fetchall()   
+
+    results = pd.DataFrame(dataResults, columns = ['productName', 'date', 'client', 'facture', 'revenue'])
+    results['date'] = pd.to_datetime(results['date'])  
+
+    #Get revenue per product and select top 10
+    top = results[['productName', 'revenue']]
+    top = top.groupby("productName").sum().sort_values(by=['revenue'], ascending=False)[:10]
+    tops = np.round(top.values.astype('float') / 1000, decimals=3)
+
+    tops_values = ' '.join(str(e) for e in np.squeeze(tops))
+    tops_columns = ' '.join(str(e) for e in np.squeeze(top.index.values))
+
+
+    #Get top 10 clients
+    clientsTop = results[['client', 'revenue']]
+    clientsTop = clientsTop.groupby('client').sum().sort_values(by=['revenue'], ascending=False)[:7]
+
+    clientsTop_values = np.squeeze(np.round(clientsTop.values.astype('float') / 1000, decimals=3))
+    clientsTop_column = np.squeeze(clientsTop.index.values)
+
+
+    #day values
+    ordersPerDay = results.groupby("date")["facture"].nunique()
+    revenuePerDay = results[['date', 'revenue']].groupby('date').sum()
+
+    revenuePerDay["per"] = revenuePerDay.pct_change()["revenue"]*100
+    ordersPerDay = pd.DataFrame({'values': ordersPerDay.values, 'per':ordersPerDay.pct_change()*100}, index=revenuePerDay.index)
+
+
+    #Month single values
+    monthlyOrders = results[['facture', 'revenue']].groupby("facture").sum().index.shape[0]
+    monthlyRevenue = results['revenue'].values.sum()
+
+    return (year_1, year_2, tops_values, tops_columns, clientsTop_values, clientsTop_column, revenuePerDay, ordersPerDay, monthlyOrders, monthlyRevenue)

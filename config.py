@@ -34,7 +34,7 @@ output_sequence_length = 15
 
 
 #This is the date, where hypothetically the prediction is gonna start in
-hypoth_current_date = "2015-12-20"   
+hypoth_current_date = "2015-12-18"   
 
 
 #Max number of data points that was used to filter products' quantity for forecasting them

@@ -34,30 +34,46 @@ webpackJsonp([0],{
     const lineCtx = lineChartBox.getContext('2d');
     lineChartBox.height = 80;
 
+    var data1 = document.getElementById('n1n-1_val1').value.split(" ");
+    var data2 = document.getElementById('n1n-1_val2').value.split(" ");
+
     new __WEBPACK_IMPORTED_MODULE_0_chart_js___default.a(lineCtx, {
       type: 'line',
       data: {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
         datasets: [{
-          label: 'Series A',
+          label: 'Last Year',
           backgroundColor: 'rgba(237, 231, 246, 0.5)',
           borderColor: __WEBPACK_IMPORTED_MODULE_1__constants_colors__["a" /* COLORS */]['deep-purple-500'],
           pointBackgroundColor: __WEBPACK_IMPORTED_MODULE_1__constants_colors__["a" /* COLORS */]['deep-purple-700'],
           borderWidth: 2,
-          data: [60, 50, 70, 60, 50, 70, 60]
+          data: data1
         }, {
-          label: 'Series B',
+          label: 'This Year',
           backgroundColor: 'rgba(232, 245, 233, 0.5)',
           borderColor: __WEBPACK_IMPORTED_MODULE_1__constants_colors__["a" /* COLORS */]['blue-500'],
           pointBackgroundColor: __WEBPACK_IMPORTED_MODULE_1__constants_colors__["a" /* COLORS */]['blue-700'],
           borderWidth: 2,
-          data: [70, 75, 85, 70, 75, 85, 70]
+          data: data2
         }]
       },
 
       options: {
         legend: {
           display: false
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              callback: function (label, index, labels) {
+                return label / 1000 + 'k';
+              }
+            },
+            scaleLabel: {
+              display: true,
+              labelString: 'Thousands of dinars'
+            }
+          }]
         }
       }
 
@@ -72,23 +88,19 @@ webpackJsonp([0],{
 
   if (barChartBox) {
     const barCtx = barChartBox.getContext('2d');
+    var vals = document.getElementById("ordersperproduct_values").value.split(" ");
+    var label = document.getElementById("ordersperproduct_prods").value.split(" ");
 
     new __WEBPACK_IMPORTED_MODULE_0_chart_js___default.a(barCtx, {
-      type: 'bar',
+      type: 'horizontalBar',
       data: {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        labels: label,
         datasets: [{
-          label: 'Dataset 1',
-          backgroundColor: __WEBPACK_IMPORTED_MODULE_1__constants_colors__["a" /* COLORS */]['deep-purple-500'],
-          borderColor: __WEBPACK_IMPORTED_MODULE_1__constants_colors__["a" /* COLORS */]['deep-purple-800'],
-          borderWidth: 1,
-          data: [10, 50, 20, 40, 60, 30, 70]
-        }, {
-          label: 'Dataset 2',
+          label: 'Product Revenue',
           backgroundColor: __WEBPACK_IMPORTED_MODULE_1__constants_colors__["a" /* COLORS */]['light-blue-500'],
           borderColor: __WEBPACK_IMPORTED_MODULE_1__constants_colors__["a" /* COLORS */]['light-blue-800'],
           borderWidth: 1,
-          data: [10, 50, 20, 40, 60, 30, 70]
+          data: vals
         }]
       },
 
@@ -96,6 +108,19 @@ webpackJsonp([0],{
         responsive: true,
         legend: {
           position: 'bottom'
+        },
+        scales: {
+          xAxes: [{
+            ticks: {
+              callback: function (label, index, labels) {
+                return label / 1000 + 'k';
+              }
+            },
+            scaleLabel: {
+              display: true,
+              labelString: 'Thousands of dinars'
+            }
+          }]
         }
       }
     });
@@ -200,7 +225,8 @@ webpackJsonp([0],{
 
   const drawSparklines = () => {
     if (__WEBPACK_IMPORTED_MODULE_0_jquery__('#sparklinedash').length > 0) {
-      __WEBPACK_IMPORTED_MODULE_0_jquery__('#sparklinedash').sparkline([0, 5, 6, 10, 9, 12, 4, 9], {
+      var vals = document.getElementById('dailyRevenue_p').value.split(" ");
+      __WEBPACK_IMPORTED_MODULE_0_jquery__('#sparklinedash').sparkline(vals, {
         type: 'bar',
         height: '20',
         barWidth: '3',
@@ -211,7 +237,8 @@ webpackJsonp([0],{
     }
 
     if (__WEBPACK_IMPORTED_MODULE_0_jquery__('#sparklinedash2').length > 0) {
-      __WEBPACK_IMPORTED_MODULE_0_jquery__('#sparklinedash2').sparkline([0, 5, 6, 10, 9, 12, 4, 9], {
+      var vals = document.getElementById('dailyOrder_p').value.split(" ");
+      __WEBPACK_IMPORTED_MODULE_0_jquery__('#sparklinedash2').sparkline(vals, {
         type: 'bar',
         height: '20',
         barWidth: '3',
@@ -728,7 +755,8 @@ const Skycons = __WEBPACK_IMPORTED_MODULE_0_skycons___default()(window);
 
 /* unused harmony default export */ var _unused_webpack_default_export = ((function () {
   var table = __WEBPACK_IMPORTED_MODULE_0_jquery__('#dataTable').DataTable({
-    "scrollX": true
+    "scrollX": true,
+    paging: false
   });
 
   __WEBPACK_IMPORTED_MODULE_0_jquery__('#dataTable tbody').on('click', 'tr', function () {
@@ -739,6 +767,7 @@ const Skycons = __WEBPACK_IMPORTED_MODULE_0_skycons___default()(window);
     if (count > 0) __WEBPACK_IMPORTED_MODULE_0_jquery__("#dataTable_length button").css("opacity", "1");else __WEBPACK_IMPORTED_MODULE_0_jquery__("#dataTable_length button").css("opacity", "0");
   });
 
+  __WEBPACK_IMPORTED_MODULE_0_jquery__("#dataTable_wrapper").prepend('<div class="dataTables_length" id="dataTable_length"></div>');
   var htmltext = "";
   htmltext += __WEBPACK_IMPORTED_MODULE_0_jquery__("#hiddenForm").html();
 
@@ -752,7 +781,6 @@ const Skycons = __WEBPACK_IMPORTED_MODULE_0_skycons___default()(window);
   });
 
   window.table = table;
-  table.order([1, 'asc']).draw();
 })());
 
 /***/ }),
@@ -1387,7 +1415,7 @@ module.exports = __webpack_require__.p + "static/e23a7dcaefbde4e74e263247aa42ecd
 /***/ 87:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "assets/6d16f95495605c95172bc8c924720bff.svg";
+module.exports = __webpack_require__.p + "static/assets/6d16f95495605c95172bc8c924720bff.svg";
 
 /***/ }),
 
@@ -1401,7 +1429,7 @@ module.exports = __webpack_require__.p + "static/674f50d287a8c48dc19ba404d20fe71
 /***/ 89:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "static/674f50d287a8c48dc19ba404d20fe713.eot";
+module.exports = __webpack_require__.p + "674f50d287a8c48dc19ba404d20fe713.eot";
 
 /***/ }),
 
