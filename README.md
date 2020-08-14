@@ -9,8 +9,7 @@ In order to get the utmost accuracy, I used [Scikit Optimize](https://scikit-opt
 
 After training, the meta-optimizer will output the best possible combination of hyperparameters with their loss, export the best performing model as *.keras, and serialize the scitkit optimize object for further heuristics on the training. For more, read the code or refer to the ScikOpt [documentation](https://scikit-optimize.github.io/stable/modules/plots.html). To change the model the dashboard uses, simply replace the old model with the new one (`model.keras`) in `static/model` directory.
 
-This project was my graduation project.
-
+This took place as my graduation project in order for me to obtain my computer science diploma.
 
 ##
 The implementation is pretty straightforward; for any questions however, contact me: 
